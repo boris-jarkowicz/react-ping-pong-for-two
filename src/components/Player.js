@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
+import PaddleCanvas from './PaddleCanvas';
+
+const canvasWidth = 20;
+const canvasHeight = 150;
+const xPos = Math.round(window.innerWidth - canvasWidth);
+const yPos = Math.round(window.innerHeight / 2 - canvasHeight / 2);
 
 class Player extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isMoving: false,
-            moveTo: 0,
+            moveToYPos: yPos,
+            movementSpeed: 25,
         };
         this.bindKeyPressEventListener.bind(this);
         this.moveUpOrDown.bind(this);
@@ -13,7 +19,6 @@ class Player extends Component {
 
     bindKeyPressEventListener() {
         document.addEventListener('keydown', (event) => {
-            console.log(event);
             this.moveUpOrDown(event.keyCode);
         });
     }
@@ -22,26 +27,41 @@ class Player extends Component {
         this.bindKeyPressEventListener();
     }
 
+    calculateYPos(operator) {
+        const newPos = this.state.moveToYPos + (operator);
+        const jailBox = 20;
+
+        if (newPos + canvasHeight >= window.innerHeight - jailBox || newPos - jailBox <= 0) {
+            return this.state.moveToYPos;
+        }
+
+        return this.state.moveToYPos + (operator);
+    }
+
     moveUpOrDown(keyCode) {
         const isMoving = keyCode === 40 || keyCode === 38;
-        const moveUp = keyCode === 38;
-        const moveDown = keyCode === 40;
-        const moveTo = isMoving && moveUp ? this.state.moveTo + 5 :
-                            isMoving && moveDown ? this.state.moveTo - 5 : this.state.moveTo + 0;
+        const moveUp = keyCode === 38 && isMoving;
+        const moveDown = keyCode === 40 && isMoving;
+        const direction = moveUp ? -Math.abs(this.state.movementSpeed) : moveDown ? this.state.movementSpeed : 0;
+
+        const moveToYPos = this.calculateYPos(direction);
 
         this.setState({
-            isMoving,
-            moveTo,
+            moveToYPos,
         }, () => console.log('STATE', this.state));
     }
 
     render() {
         return (
-            <div className="player">
-                Player
-            </div>
+            <PaddleCanvas
+                canvasWidth={canvasWidth}
+                canvasHeight={canvasHeight}
+                xPos={xPos}
+                yPos={this.state.moveToYPos}
+            />
+
         )
     }
 }
-// 40 down 38 up
+
 export default Player;
