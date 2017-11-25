@@ -48,7 +48,7 @@ class Player extends Component {
 
         this.setState({
             moveToYPos,
-        }, () => console.log('STATE', this.state));
+        }, () => console.log('PLAYER COMPONENT STATE', this.state));
     }
 
     render() {

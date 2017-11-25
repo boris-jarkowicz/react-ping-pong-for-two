@@ -20,7 +20,7 @@ class PaddleCanvas extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('nextProps', nextProps);
+        //console.log('nextProps', nextProps);
 
         this.setState({
             canvasWidth: this.props.canvasWidth,
@@ -29,12 +29,12 @@ class PaddleCanvas extends Component {
             yPos: this.props.yPos,
         });
 
-        console.log('componentWillReceiveProps', this.state);
+        //console.log('componentWillReceiveProps', this.state);
     }
 
     createCanvas(clear) {
         const ctx = this.refs.canvas.getContext('2d');
-        console.log('new update', this.state);
+        //console.log('new update', this.state);
         ctx.clearRect(this.state.xPos, this.state.yPos, this.state.canvasWidth, this.state.canvasHeight);
         ctx.fillStyle = 'transparent';
 
