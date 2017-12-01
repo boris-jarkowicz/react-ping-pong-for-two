@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
     movePaddle,
-    allowMovement,
 } from '../redux/actions/actions';
 import PaddleCanvas from '../components/PaddleCanvas';
 
@@ -50,9 +49,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onKeyPress: (event) => {
             dispatch(movePaddle(event.keyCode));
-        },
-        toMoveOrNotToMove: (bool) => {
-            dispatch(allowMovement(bool));
         },
     }
 };

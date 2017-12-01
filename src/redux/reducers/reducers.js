@@ -2,7 +2,6 @@ import {
     GET_INITIAL_PLAYER_MOVEMENT,
     GET_PADDLE_SIZE,
     MOVE_PADDLE,
-    STOP_PADDLE,
 } from '../actions/actions';
 
 const initialState = {
@@ -44,13 +43,6 @@ export default (state = initialState, { type, payload }) => {
                 :
                 payload.moveDown && allowedToMoveDown
                 ? state.yPos + state.movementSpeed : state.yPos + 0,
-            }
-        }
-
-        case STOP_PADDLE: {
-            return {
-                ...state,
-                movementAllowed: payload.allowed,
             }
         }
 
