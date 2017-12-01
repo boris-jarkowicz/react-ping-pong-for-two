@@ -16,7 +16,6 @@ class PaddleCanvas extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('nextProps', nextProps);
         this.clearCanvas();
     }
 

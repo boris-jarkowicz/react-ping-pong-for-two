@@ -7,13 +7,19 @@ import App from './App';
 import reducers from './redux/reducers/reducers';
 import {
     getPaddleSize,
+    sendPlayerData,
+    getPlayerData,
 } from './redux/actions/actions';
 
 //import registerServiceWorker from './registerServiceWorker';
 
 let store = createStore(reducers);
 
-console.log('store.getState()', store.getState());
+const unsubscribe = store.subscribe(() => {
+    getPlayerData();
+    sendPlayerData(store.getState());
+});
+
 store.dispatch(getPaddleSize(), store.getState());
 
 

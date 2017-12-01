@@ -9,8 +9,6 @@ class Player extends Component {
     constructor(props) {
         super(props);
         this.bindKeyPressEventListener.bind(this);
-
-        console.log('PLAYER PROPS', this.props);
     }
 
     bindKeyPressEventListener() {
@@ -35,8 +33,8 @@ class Player extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    console.log('mapStateToProps ownProps', ownProps);
-    console.log('mapStateToProps', state);
+    //console.log('mapStateToProps ownProps', ownProps);
+    //console.log('mapStateToProps', state);
 
     return {
         ...state,
@@ -44,7 +42,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-    console.log('mapDispatchToProps ownProps', ownProps);
+    //console.log('mapDispatchToProps ownProps', ownProps);
 
     return {
         onKeyPress: (event) => {

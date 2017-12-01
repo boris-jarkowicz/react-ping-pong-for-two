@@ -10,7 +10,6 @@ class App extends Component {
         /*subscribeToTimer((err, timestamp) => this.setState({
             timestamp
         }));*/
-        console.log('APP PROPS', this.props);
     }
 
     /*state = {
