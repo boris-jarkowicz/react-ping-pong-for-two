@@ -3,12 +3,8 @@ import React, { Component } from 'react';
 class PaddleCanvas extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            canvasWidth: this.props.canvasWidth,
-            canvasHeight: this.props.canvasHeight,
-            xPos: this.props.xPos,
-            yPos: this.props.yPos,
-        };
+        this.clearCanvas = this.clearCanvas.bind(this);
+        this.createCanvas = this.createCanvas.bind(this);
     }
 
     componentDidMount() {
@@ -21,22 +17,16 @@ class PaddleCanvas extends Component {
 
     componentWillReceiveProps(nextProps) {
         console.log('nextProps', nextProps);
+        this.clearCanvas();
+    }
 
-        this.setState({
-            canvasWidth: this.props.canvasWidth,
-            canvasHeight: this.props.canvasHeight,
-            xPos: this.props.xPos,
-            yPos: this.props.yPos,
-        });
-
-        console.log('componentWillReceiveProps', this.state);
+    clearCanvas() {
+        const ctx = this.refs.canvas.getContext('2d');
+        ctx.clearRect(this.props.xPos, this.props.yPos, this.props.canvasWidth, this.props.canvasHeight);
     }
 
     createCanvas(clear) {
         const ctx = this.refs.canvas.getContext('2d');
-        console.log('new update', this.state);
-        ctx.clearRect(this.state.xPos, this.state.yPos, this.state.canvasWidth, this.state.canvasHeight);
-        ctx.fillStyle = 'transparent';
 
         const {
             canvasWidth,
