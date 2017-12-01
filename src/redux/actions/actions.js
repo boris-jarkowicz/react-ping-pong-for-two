@@ -1,32 +1,42 @@
-export const GET_PLAYER_MOVEMENT_FROM_STATE = 'GET_PLAYER_MOVEMENT_FROM_STATE';
-export const SEND_PLAYER_MOVEMENT_TO_SERVER = 'SEND_PLAYER_MOVEMENT_TO_SERVER';
-export const GET_PLAYER_MOVEMENT_FROM_SERVER = 'GET_PLAYER_MOVEMENT_FROM_SERVER';
-export const IS_PLAYER_CONNECTED = 'IS_PLAYER_CONNECTED';
+export const MOVE_PADDLE = 'MOVE_PADDLE';
+export const STOP_PADDLE = 'STOP_PADDLE';
+export const GET_PADDLE_SIZE = 'GET_PADDLE_SIZE';
+export const GET_INITIAL_PLAYER_MOVEMENT = 'GET_INITIAL_PLAYER_MOVEMENT';
 
-export function getPlayerMovementFromState(playerState = {}) {
+export function getPaddleSize() {
+    console.log('ACTION CALLED: getPaddleSize');
     return {
-        type: GET_PLAYER_MOVEMENT_FROM_STATE,
-        payload: playerState,
+        type: GET_PADDLE_SIZE,
     };
 }
 
-export function sendPlayerMovementToServer(playerState = {}) {
+export function getInitialPlayerMovement() {
+    console.log('ACTION CALLED: getInitialPlayerMovement');
     return {
-        type: SEND_PLAYER_MOVEMENT_TO_SERVER,
-        payload: playerState,
+        type: GET_INITIAL_PLAYER_MOVEMENT,
     };
 }
 
-export function getPlayerMovementFromServer(serverData) {
+export function movePaddle(keyCode) {
+    const isMoving = keyCode === 40 || keyCode === 38;
+    const moveUp = keyCode === 38 && isMoving;
+    const moveDown = keyCode === 40 && isMoving;
+
+    console.log('ACTION CALLED: movePaddle', keyCode);
     return {
-        type: GET_PLAYER_MOVEMENT_FROM_SERVER,
-        payload: serverData,
+        type: MOVE_PADDLE,
+        payload: {
+            moveUp,
+            moveDown,
+        },
     };
 }
 
-export function isPlayerConnected(serverData) {
+export function allowMovement(isMovementAllowed) {
     return {
-        type: IS_PLAYER_CONNECTED,
-        payload: serverData,
+        type: STOP_PADDLE,
+        payload: {
+            isMovementAllowed,
+        }
     };
 }
