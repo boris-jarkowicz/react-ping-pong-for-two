@@ -14,11 +14,20 @@ import {
 //import registerServiceWorker from './registerServiceWorker';
 
 let store = createStore(reducers);
-
 const unsubscribe = store.subscribe(() => {
-    getPlayerData();
-    sendPlayerData(store.getState());
+
+    setTimeout(() => {
+        getPlayerData();
+    }, 50);
+
+    setTimeout(() => {
+        sendPlayerData(store.getState());
+    }, 50);
+
+    console.log('CURRENT APP STATE', store.getState());
 });
+
+//unsubscribe();
 
 store.dispatch(getPaddleSize(), store.getState());
 
