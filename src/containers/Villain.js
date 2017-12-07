@@ -1,28 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    movePaddle,
-} from '../redux/actions/actions';
 import PaddleCanvas from '../components/PaddleCanvas';
 
-class Player extends Component {
+class Villain extends Component {
     constructor(props) {
         super(props);
-        this.bindKeyPressEventListener.bind(this);
 
-        console.log('PLAYER PROPS', this.props);
-    }
-
-    bindKeyPressEventListener() {
-        document.addEventListener('keydown', this.props.onKeyPress);
+        console.log('VILLAIN PROPS', this.props);
     }
 
     componentDidMount() {
-        console.log('componentDidMount');
-    }
-
-    componentWillMount() {
-        this.bindKeyPressEventListener();
+        console.log('componentDidMount Villain');
     }
 
     render() {
@@ -40,13 +28,13 @@ class Player extends Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log('mapStateToProps', state);
+    console.log('mapStateToProps VILLAIN', state);
 
     return {
-        ...state.playerProps,
+        ...state.villainProps,
     };
 };
-
+/*
 const mapDispatchToProps = (dispatch) => {
 
     return {
@@ -55,8 +43,7 @@ const mapDispatchToProps = (dispatch) => {
         },
     }
 };
-
+*/
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Player);
+    mapStateToProps
+)(Villain);

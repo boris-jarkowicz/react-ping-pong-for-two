@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Player from './containers/Player';
+import Villain from './containers/Villain';
 import PaddleCanvas from './components/PaddleCanvas';
 //import { subscribeToTimer } from './api';
 import './App.css';
@@ -20,7 +21,7 @@ class App extends Component {
         return (
             <div className="App">
                 <Player />
-                <PaddleCanvas />
+                <Villain />
             </div>
         );
     }

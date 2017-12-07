@@ -1,5 +1,4 @@
 import {
-    GET_INITIAL_PLAYER_MOVEMENT,
     GET_PADDLE_SIZE,
     MOVE_PADDLE,
     GET_VILLAIN_MOVEMENT
@@ -11,9 +10,18 @@ const initialState = {
         canvasHeight: 150,
         xPos: Math.round(window.innerWidth - 20),
         yPos: Math.round(window.innerHeight / 2 - 150 / 2),
-        moveToYPos: 0,
         movementSpeed: 25,
         jailBox: 20,
+        paddleColor: 'green',
+    },
+    villainProps: {
+        canvasWidth: 20,
+        canvasHeight: 150,
+        xPos: 0,
+        yPos: Math.round(window.innerHeight / 2 - 150 / 2),
+        movementSpeed: 25,
+        jailBox: 20,
+        paddleColor: 'purple',
     }
 };
 
@@ -24,13 +32,6 @@ export default (state = initialState, { type, payload }) => {
         case GET_PADDLE_SIZE: {
             return {
                 ...state,
-            }
-        }
-
-        case GET_INITIAL_PLAYER_MOVEMENT: {
-            return {
-                ...state,
-                initialState,
             }
         }
 

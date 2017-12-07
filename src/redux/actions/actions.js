@@ -12,13 +12,6 @@ export function getPaddleSize() {
     };
 }
 
-export function getInitialPlayerMovement() {
-    console.log('ACTION CALLED: getInitialPlayerMovement');
-    return {
-        type: GET_INITIAL_PLAYER_MOVEMENT,
-    };
-}
-
 export function movePaddle(keyCode) {
     const isMoving = keyCode === 40 || keyCode === 38;
     const moveUp = keyCode === 38 && isMoving;
