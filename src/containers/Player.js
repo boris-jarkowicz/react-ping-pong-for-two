@@ -34,17 +34,15 @@ class Player extends Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    console.log('mapStateToProps ownProps', ownProps);
+const mapStateToProps = (state) => {
     console.log('mapStateToProps', state);
 
     return {
-        ...state,
+        ...state.playerProps,
     };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-    console.log('mapDispatchToProps ownProps', ownProps);
+const mapDispatchToProps = (dispatch) => {
 
     return {
         onKeyPress: (event) => {

@@ -1,13 +1,14 @@
 const io = require('socket.io')();
 
 io.on('connection', (client) => {
-    client.on('subscribeToTimer', (interval) => {
-        console.log('client is subscribing to timer with interval ', interval);
-        setInterval(() => {
-            client.emit('timer', new Date());
-        }, interval);
+    console.log('CONNECTED', client);
+    client.on('sendData', (data) => {
+        console.log('client is sending ', data);
+        client.broadcast.emit('playerData', data);
     });
 });
+
+const nsp = io.of('/arena');
 
 const port = 8000;
 io.listen(port);
