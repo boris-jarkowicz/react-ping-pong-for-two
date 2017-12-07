@@ -59,16 +59,8 @@ export default (state = initialState, { type, payload }) => {
             }
         }
 
-        case GET_VILLAIN_MOVEMENT: {
-            console.log('REDUCER yPosVillain', payload);
-            return {
-                ...state,
-                payload,
-            }
-        }
-
         default: {
             return state;
         }
     }
-}
+};

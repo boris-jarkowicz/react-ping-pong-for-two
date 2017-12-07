@@ -43,7 +43,7 @@ const mapStateToProps = (state) => {
     console.log('mapStateToProps', state);
 
     return {
-        ...state.playerProps,
+        ...state.defaultState.playerProps,
     };
 };
 

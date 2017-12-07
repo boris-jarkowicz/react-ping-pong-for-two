@@ -1,19 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { combineReducers, createStore } from 'redux'
 import './index.css';
 import App from './App';
-import reducers from './redux/reducers/reducers';
+import defaultState from './redux/reducers/reducers';
 import {
     getPaddleSize,
     sendPlayerData,
     getPlayerData,
 } from './redux/actions/actions';
 
-//import registerServiceWorker from './registerServiceWorker';
+const rootReducer = combineReducers({
+    defaultState,
+});
 
-let store = createStore(reducers);
+let store = createStore(rootReducer);
 const unsubscribe = store.subscribe(() => {
 
     setTimeout(() => {
@@ -27,10 +29,7 @@ const unsubscribe = store.subscribe(() => {
     console.log('CURRENT APP STATE', store.getState());
 });
 
-//unsubscribe();
-
 store.dispatch(getPaddleSize(), store.getState());
-
 
 ReactDOM.render(
     <Provider store={store}>
@@ -38,4 +37,3 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 );
-//registerServiceWorker();
