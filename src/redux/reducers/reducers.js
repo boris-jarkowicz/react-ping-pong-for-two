@@ -27,7 +27,6 @@ const initialState = {
 };
 
 export default (state = initialState, { type, payload }) => {
-    //console.log('REDUCER ACTION TYPE', type);
     switch(type) {
 
         case GET_PADDLE_SIZE: {
