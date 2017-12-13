@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
     movePaddle,
+    getVillainData,
 } from '../redux/actions/actions';
 import PaddleCanvas from '../components/PaddleCanvas';
 
@@ -19,6 +20,7 @@ class Player extends Component {
 
     componentDidMount() {
         console.log('componentDidMount');
+        this.props.listenForVillain();
     }
 
     componentWillMount() {
@@ -52,6 +54,11 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onKeyPress: (event) => {
             dispatch(movePaddle(event.keyCode));
+        },
+        listenForVillain: () => {
+            window.setTimeout(() => {
+                dispatch(getVillainData())
+            }, 16);
         },
     }
 };

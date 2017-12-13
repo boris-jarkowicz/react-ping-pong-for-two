@@ -1,8 +1,9 @@
 import {
     GET_PADDLE_SIZE,
     MOVE_PADDLE,
-    GET_VILLAIN_MOVEMENT
+    GET_VILLAIN_MOVEMENT,
 } from '../actions/actions';
+import { sendDataToServer } from '../../client';
 
 const initialState = {
     playerProps: {
@@ -54,6 +55,9 @@ export default (state = initialState, { type, payload }) => {
                             ? yPos + movementSpeed : yPos + 0;
 
             state.playerProps.yPos = newPos;
+
+            sendDataToServer({yPos: newPos});
+
             return {
                 ...state,
             }
@@ -64,3 +68,21 @@ export default (state = initialState, { type, payload }) => {
         }
     }
 };
+
+export function villainState(state = initialState, { type, payload }) {
+    console.log('REDUCER VILLAIN STATE', state);
+    console.log('REDUCER VILLAIN TYPE', type);
+    console.log('REDUCER VILLAIN PAYLOAD', payload);
+    switch(type) {
+        case GET_VILLAIN_MOVEMENT: {
+            state.villainProps.yPos = payload.yPos;
+            return {
+                ...state,
+            }
+        }
+
+        default: {
+            return state;
+        }
+    }
+}

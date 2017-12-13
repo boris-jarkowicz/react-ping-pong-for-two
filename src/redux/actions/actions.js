@@ -1,4 +1,4 @@
-import { sendDataToServer, getDataFromServer } from '../../client';
+import { getDataFromServer } from '../../client';
 
 export const MOVE_PADDLE = 'MOVE_PADDLE';
 export const GET_PADDLE_SIZE = 'GET_PADDLE_SIZE';
@@ -26,30 +26,23 @@ export function movePaddle(keyCode) {
     };
 }
 
-export function sendPlayerData(position) {
-    sendDataToServer(position);
-
-    return {
-        type: MOVE_PADDLE,
-    };
-}
-
 export function mapVillainMovementToState(data) {
-    const villainPosition = data.yPos;
-    console.log('mapVillainMovementToState', villainPosition);
+    console.log('mapVillainMovementToState ACTION SYNC', data);
+    const villainPosition = data ? data.yPos : 0;
     return {
         type: GET_VILLAIN_MOVEMENT,
         payload: {
-            villainPosition,
+            yPos: villainPosition,
         }
     };
 }
 
-export function getPlayerData() {
-    console.log('GETTING FROM SERVER');
-
-    getDataFromServer((err, data) => {
-        console.log('getDataFromServer', data);
-        mapVillainMovementToState(data);
-    });
+export function getVillainData() {
+    console.log('GETTING VILLAIN DATA ACTION');
+    return dispatch => {
+        getDataFromServer((err, data) => {
+            console.log('VILLAIN ASYNC CALLBACK', data);
+            dispatch(mapVillainMovementToState(data));
+        });
+    }
 }

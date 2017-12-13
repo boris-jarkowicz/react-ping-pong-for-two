@@ -15,8 +15,9 @@ const Villain = (props) => {
     );
 }
 
-const mapStateToProps = (state) => {
-    console.log('mapStateToProps VILLAIN', state);
+const mapStateToProps = (state, ownProps) => {
+    console.log('mapStateToProps VILLAIN STATE', state);
+    console.log('mapStateToProps VILLAIN OWNPROPS', ownProps);
 
     return {
         ...state.defaultState.villainProps,
