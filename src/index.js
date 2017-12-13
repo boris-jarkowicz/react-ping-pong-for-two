@@ -1,36 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { combineReducers, createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import './index.css';
 import App from './App';
-import reducers from './redux/reducers/reducers';
+import defaultState, { villainState } from './redux/reducers/reducers';
 import {
     getPaddleSize,
     sendPlayerData,
-    getPlayerData,
+    getVillainData,
 } from './redux/actions/actions';
 
-//import registerServiceWorker from './registerServiceWorker';
-
-let store = createStore(reducers);
-const unsubscribe = store.subscribe(() => {
-
-    setTimeout(() => {
-        getPlayerData();
-    }, 50);
-
-    setTimeout(() => {
-        sendPlayerData(store.getState());
-    }, 50);
-
-    console.log('CURRENT APP STATE', store.getState());
+const rootReducer = combineReducers({
+    defaultState,
+    villainState,
 });
 
-//unsubscribe();
+let store = createStore(
+    rootReducer,
+    applyMiddleware(thunk),
+);
 
-store.dispatch(getPaddleSize(), store.getState());
-
+const unsubscribe = store.subscribe(() => {
+    console.log('CURRENT APP STATE', store.getState());
+});
 
 ReactDOM.render(
     <Provider store={store}>
@@ -38,4 +32,3 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 );
-//registerServiceWorker();

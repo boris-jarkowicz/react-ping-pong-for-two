@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
     movePaddle,
+    getVillainData,
 } from '../redux/actions/actions';
 import PaddleCanvas from '../components/PaddleCanvas';
 
@@ -17,6 +18,10 @@ class Player extends Component {
         document.addEventListener('keydown', this.props.onKeyPress);
     }
 
+    componentDidMount() {
+        this.props.listenForVillain();
+    }
+
     componentWillMount() {
         this.bindKeyPressEventListener();
     }
@@ -28,6 +33,7 @@ class Player extends Component {
                 canvasHeight={this.props.canvasHeight}
                 xPos={this.props.xPos}
                 yPos={this.props.yPos}
+                color={this.props.paddleColor}
             />
 
         )
@@ -38,7 +44,7 @@ const mapStateToProps = (state) => {
     console.log('mapStateToProps', state);
 
     return {
-        ...state.playerProps,
+        ...state.defaultState.playerProps,
     };
 };
 
@@ -47,6 +53,11 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onKeyPress: (event) => {
             dispatch(movePaddle(event.keyCode));
+        },
+        listenForVillain: () => {
+            window.setTimeout(() => {
+                dispatch(getVillainData())
+            }, 16);
         },
     }
 };

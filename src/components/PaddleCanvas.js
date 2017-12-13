@@ -32,16 +32,19 @@ class PaddleCanvas extends Component {
             canvasHeight,
             xPos,
             yPos,
+            color,
         } = this.props;
 
         //console.log('CANVAS PROPS', this.props);
-        ctx.fillStyle = 'green';
+        ctx.fillStyle = color;
         ctx.fillRect(xPos, yPos, canvasWidth, canvasHeight);
     }
 
     render() {
         return (
-            <canvas ref="canvas" width={window.innerWidth} height={window.innerHeight} />
+            <div className="canvasWrapper">
+                <canvas ref="canvas" width={window.innerWidth} height={window.innerHeight} />
+            </div>
         );
     }
 }

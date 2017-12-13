@@ -1,9 +1,9 @@
 import {
-    GET_INITIAL_PLAYER_MOVEMENT,
     GET_PADDLE_SIZE,
     MOVE_PADDLE,
-    GET_VILLAIN_MOVEMENT
+    GET_VILLAIN_MOVEMENT,
 } from '../actions/actions';
+import { sendDataToServer } from '../../client';
 
 const initialState = {
     playerProps: {
@@ -11,26 +11,27 @@ const initialState = {
         canvasHeight: 150,
         xPos: Math.round(window.innerWidth - 20),
         yPos: Math.round(window.innerHeight / 2 - 150 / 2),
-        moveToYPos: 0,
         movementSpeed: 25,
         jailBox: 20,
+        paddleColor: 'green',
+    },
+    villainProps: {
+        canvasWidth: 20,
+        canvasHeight: 150,
+        xPos: 0,
+        yPos: Math.round(window.innerHeight / 2 - 150 / 2),
+        movementSpeed: 25,
+        jailBox: 20,
+        paddleColor: 'purple',
     }
 };
 
 export default (state = initialState, { type, payload }) => {
-    //console.log('REDUCER ACTION TYPE', type);
     switch(type) {
 
         case GET_PADDLE_SIZE: {
             return {
                 ...state,
-            }
-        }
-
-        case GET_INITIAL_PLAYER_MOVEMENT: {
-            return {
-                ...state,
-                initialState,
             }
         }
 
@@ -53,16 +54,29 @@ export default (state = initialState, { type, payload }) => {
                             ? yPos + movementSpeed : yPos + 0;
 
             state.playerProps.yPos = newPos;
+
+            sendDataToServer({yPos: newPos});
+
             return {
                 ...state,
             }
         }
 
+        default: {
+            return state;
+        }
+    }
+};
+
+export function villainState(state = initialState, { type, payload }) {
+    console.log('REDUCER VILLAIN STATE', state);
+    console.log('REDUCER VILLAIN TYPE', type);
+    console.log('REDUCER VILLAIN PAYLOAD', payload);
+    switch(type) {
         case GET_VILLAIN_MOVEMENT: {
-            console.log('REDUCER yPosVillain', payload);
+            state.villainProps.yPos = payload.yPos;
             return {
                 ...state,
-                payload,
             }
         }
 
