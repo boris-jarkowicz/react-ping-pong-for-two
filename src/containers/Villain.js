@@ -15,12 +15,11 @@ const Villain = (props) => {
     );
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     console.log('mapStateToProps VILLAIN STATE', state);
-    console.log('mapStateToProps VILLAIN OWNPROPS', ownProps);
 
     return {
-        ...state.defaultState.villainProps,
+        ...state.villainState,
     };
 };
 

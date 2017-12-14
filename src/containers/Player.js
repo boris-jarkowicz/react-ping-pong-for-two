@@ -41,10 +41,10 @@ class Player extends Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log('mapStateToProps', state);
+    console.log('mapStateToProps PLAYER', state);
 
     return {
-        ...state.defaultState.playerProps,
+        ...state.playerState,
     };
 };
 
