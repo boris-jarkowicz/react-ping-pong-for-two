@@ -8,7 +8,12 @@ function getDataFromServer(cb) {
     socket.on('playerData', data => cb(null, data));
 }
 
+function getPlayerNumber(cb) {
+    socket.on('sendPlayerNumber', data => cb(null, data));
+}
+
 export {
     sendDataToServer,
     getDataFromServer,
+    getPlayerNumber,
  };
