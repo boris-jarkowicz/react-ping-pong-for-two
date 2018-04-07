@@ -1,10 +1,16 @@
 import { getState } from '../../index';
-import { sendDataToServer, getVillainPlayerDataFromServer, getPlayerNumber } from '../../client';
+import {
+    sendDataToServer,
+    getVillainPlayerDataFromServer,
+    getPlayerNumber,
+    getBallMovement,
+} from '../../client';
 
 export const MOVE_PADDLE = 'MOVE_PADDLE';
 export const INIT_PADDLE = 'INIT_PADDLE';
 export const GET_INITIAL_PLAYER_MOVEMENT = 'GET_INITIAL_PLAYER_MOVEMENT';
 export const GET_VILLAIN_MOVEMENT = 'GET_VILLAIN_MOVEMENT';
+export const MAP_BALL_MOVEMENT_TO_STATE = 'MAP_BALL_MOVEMENT_TO_STATE';
 
 export function initPaddle(playerData) {
     console.log('ACTION CALLED: initPaddle', playerData);
@@ -13,6 +19,17 @@ export function initPaddle(playerData) {
         payload: {
             playerData,
         }
+    };
+}
+
+export function movePingBall(movementData) {
+    console.log('movementData', movementData);
+
+    return {
+        type: MAP_BALL_MOVEMENT_TO_STATE,
+        payload: {
+            //newPos,
+        },
     };
 }
 
@@ -90,5 +107,13 @@ export function getPlayerFromServerName() {
 export function sendPlayerIdToServer(localStoragePlayerData) {
     return (dispatch) => {
         sendDataToServer(localStoragePlayerData);
+    }
+}
+
+export function getBallMovementFromServer() {
+    return (dispatch) => {
+        getBallMovement((err, serverData) => {
+            dispatch();
+        });
     }
 }

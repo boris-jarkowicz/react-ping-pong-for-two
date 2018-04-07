@@ -10,7 +10,7 @@ import {
     getPlayerFromServerName,
     sendPlayerIdToServer,
 } from './redux/actions/actions';
-import { establishConnection } from './client';
+import { establishConnection, getPlayerNumber } from './client';
 
 const rootReducer = combineReducers({
     playerState,
@@ -54,6 +54,10 @@ if (Object.entries(persistedState).length === 0) {
         () => store.dispatch(sendPlayerIdToServer(getState().playerState))
     );
 }
+
+getPlayerNumber((err, data) => {
+    console.log('PLAYER NUMBER IN STORE', data);
+});
 
 ReactDOM.render(
     <Provider store={store}>

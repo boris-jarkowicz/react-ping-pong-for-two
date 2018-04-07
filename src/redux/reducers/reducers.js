@@ -2,6 +2,7 @@ import {
     INIT_PADDLE,
     MOVE_PADDLE,
     GET_VILLAIN_MOVEMENT,
+    MAP_BALL_MOVEMENT_TO_STATE,
 } from '../actions/actions';
 
 const canvasWidth = 20;
@@ -36,7 +37,16 @@ const initialState = {
         paddleColor: 'purple',
         playerName,
         playerId,
-    }
+    },
+    pingBallProps: {
+        xPos: Math.round(window.innerWidth / 2),
+        yPos: Math.round(window.innerHeight / 2),
+        ballColor: 'red',
+        boundaryTouched: false,
+        playerTouched: false,
+        jailBox,
+        movementSpeed,
+    },
 };
 
 export default (state = initialState.playerProps, { type = '', payload = {} }) => {
@@ -68,6 +78,23 @@ export function villainState(state = initialState.villainProps, { type, payload 
     switch(type) {
         case GET_VILLAIN_MOVEMENT: {
             state.yPos = payload.yPos;
+            return {
+                ...state,
+            }
+        }
+
+        default: {
+            return state;
+        }
+    }
+}
+
+export function pingBallState(state = initialState.pingBallProps, { type, payload }) {
+    switch(type) {
+        case MAP_BALL_MOVEMENT_TO_STATE: {
+            state.xPos = payload.xPos;
+            state.yPos = payload.yPos;
+
             return {
                 ...state,
             }

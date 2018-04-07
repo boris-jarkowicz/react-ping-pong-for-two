@@ -10,20 +10,11 @@ console.log('socket', socket);
 
 function establishConnection(playerId, cb) {
     console.log('establishConnection CALLED');
+    socket.id = playerId;
     socket.open();
     socket.on('connect', () => {
         console.log('CONNECTED');
-
-        if (playerId) {
-            //socket.id = playerId;
-        }
-
         cb();
-    });
-    socket.on('connect_error', (error) => {
-        console.error('CONNECTION ERROR');
-        unsubscribe();
-        window.localStorage.removeItem('playerData');
     });
 }
 
@@ -39,6 +30,10 @@ function getPlayerNumber(cb) {
     socket.on('sendPlayerNumber', data => cb(null, data));
 }
 
+function getBallMovement(cb) {
+    socket.on('sendBallMovement', data => cb(null, data));
+}
+
 socket.on('serverToClient', (data) => {
     console.log('GREETING', data);
 });
@@ -46,6 +41,13 @@ socket.on('serverToClient', (data) => {
 socket.on('disconnect', (error) => {
     console.error('RELOAD');
     unsubscribe();
+    //window.localStorage.removeItem('playerData');
+});
+
+socket.on('connect_error', (error) => {
+    console.error('CONNECTION ERROR');
+    unsubscribe();
+    window.localStorage.removeItem('playerData');
 });
 
 export {
@@ -53,4 +55,5 @@ export {
     getVillainPlayerDataFromServer,
     getPlayerNumber,
     establishConnection,
+    getBallMovement,
  };

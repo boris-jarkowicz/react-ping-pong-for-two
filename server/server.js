@@ -1,53 +1,69 @@
 const io = require('socket.io')();
+const port = 8000;
+io.listen(port);
+console.log('listening on port ', port);
 
 const players = {};
 const maxAllowedPlayers = 2;
 
+const greetPlayer = (id, name) => {
+    io.to(id).emit('serverToClient', `HELLO ${name}`);
+};
+
+const handleDataFromClient = (socket, data) => {
+    console.log('client is sending ', data);
+    socket.broadcast.emit('playerData', data);
+
+    if (players.playerOne && data.playerId === players.playerOne.id) {
+        console.log('PLAYER 1 STORED DATA', data.playerId);
+        greetPlayer(socket.id, players.playerOne.name);
+    }
+
+    if (players.playerTwo && data.playerId === players.playerTwo.id) {
+        console.log('PLAYER 2 STORED DATA', data.playerId);
+        greetPlayer(socket.id, players.playerTwo.name);
+    }
+};
+
+const registerPlayer = (playerName, id) => {
+    io.to(id).emit('sendPlayerNumber', {
+        playerName: playerName,
+        playerId: id,
+    });
+    console.log('registerPlayer', {
+        playerName: playerName,
+        playerId: id,
+    });
+    const firstOrSecondPlayer = Object.keys(players).length === 0 ? 'playerOne' : 'playerTwo';
+
+    players[firstOrSecondPlayer] = { id: id, name: playerName };
+    greetPlayer(players[firstOrSecondPlayer].id, players[firstOrSecondPlayer].name);
+};
+
+
 io.on('connection', (socket) => {
     const { clientsCount } = socket.conn.server;
     console.log('clientsCount', clientsCount);
-
     if (clientsCount > maxAllowedPlayers) {
         socket.disconnect();
     }
-
+    console.log('CREATE PLAYER ONE', clientsCount > 0 && clientsCount < maxAllowedPlayers && !players.playerOne);
     if (clientsCount > 0 && clientsCount < maxAllowedPlayers && !players.playerOne) {
-        io.to(socket.id).emit('sendPlayerNumber', {
-            playerName: 'Player 1',
-            playerId: socket.id,
-        });
-        players.playerOne = socket.id;
-        io.to(socket.id).emit('serverToClient', 'HELLO PLAYER 1');
+        const playerOneName = 'Player 1';
+        registerPlayer(playerOneName, socket.id);
     }
-
+    console.log('CREATE PLAYER TWO', clientsCount === maxAllowedPlayers && !players.playerTwo);
     if (clientsCount === maxAllowedPlayers && !players.playerTwo) {
-        io.to(socket.id).emit('sendPlayerNumber', {
-            playerName: 'Player 2',
-            playerId: socket.id,
-        });
-        players.playerTwo = socket.id;
-        io.to(socket.id).emit('serverToClient', 'HELLO PLAYER 2');
+        const playerTwoName = 'Player 2';
+        registerPlayer(playerTwoName, socket.id);
     }
 
     console.log('CONNECTED PLAYERS', players);
-
-    socket.on('sendData', (data) => {
-        console.log('client is sending ', data);
-        socket.broadcast.emit('playerData', data);
-
-        if (data.playerId === players.playerOne) {
-            console.log('PLAYER 1 STORED DATA', data.playerId);
-            io.to(socket.id).emit('serverToClient', 'HELLO PLAYER 1');
-        }
-
-        if (data.playerId === players.playerTwo) {
-            console.log('PLAYER 2 STORED DATA', data.playerId);
-            io.to(socket.id).emit('serverToClient', 'HELLO PLAYER 2');
-        }
+    socket.on('disconnecting', (reason) => {
+        const disconnectingSocketId = socket.id;
+        console.log('DISCONNECTING PLAYER', socket.id);
+        console.log('CONNECTED PLAYERS AFTER DISCONNECTED', players);
     });
 
+    socket.on('sendData', data => handleDataFromClient(socket, data));
 });
-
-const port = 8000;
-io.listen(port);
-console.log('listening on port ', port);
