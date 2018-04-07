@@ -1,61 +1,57 @@
 import {
-    GET_PADDLE_SIZE,
+    INIT_PADDLE,
     MOVE_PADDLE,
     GET_VILLAIN_MOVEMENT,
 } from '../actions/actions';
-import { sendDataToServer } from '../../client';
+
+const canvasWidth = 20;
+const canvasHeight = 150;
+const xPos = Math.round(window.innerWidth - 20);
+const yPos = Math.round(window.innerHeight / 2 - 150 / 2);
+const movementSpeed = 25;
+const jailBox = 20;
+const paddleColor = 'green';
+const playerName = null;
+const playerId = null;
 
 const initialState = {
     playerProps: {
-        canvasWidth: 20,
-        canvasHeight: 150,
-        xPos: Math.round(window.innerWidth - 20),
-        yPos: Math.round(window.innerHeight / 2 - 150 / 2),
-        movementSpeed: 25,
-        jailBox: 20,
-        paddleColor: 'green',
+        canvasWidth,
+        canvasHeight,
+        xPos,
+        yPos,
+        movementSpeed,
+        jailBox,
+        paddleColor,
+        playerName,
+        playerId,
     },
     villainProps: {
-        canvasWidth: 20,
-        canvasHeight: 150,
+        canvasWidth,
+        canvasHeight,
         xPos: 0,
-        yPos: Math.round(window.innerHeight / 2 - 150 / 2),
-        movementSpeed: 25,
-        jailBox: 20,
+        yPos,
+        movementSpeed,
+        jailBox,
         paddleColor: 'purple',
+        playerName,
+        playerId,
     }
 };
 
-export default (state = initialState, { type, payload }) => {
+export default (state = initialState.playerProps, { type = '', payload = {} }) => {
     switch(type) {
 
-        case GET_PADDLE_SIZE: {
+        case INIT_PADDLE: {
+            state.playerName = payload.playerData.playerName;
+            state.playerId = payload.playerData.playerId;
             return {
                 ...state,
             }
         }
 
         case MOVE_PADDLE: {
-            console.log('REDUCER: MOVE_PADDLE', state);
-
-            const {
-                yPos,
-                canvasHeight,
-                jailBox,
-                movementSpeed
-            } = state.playerProps;
-
-            const allowedToMoveDown = yPos + canvasHeight < window.innerHeight - jailBox;
-            const allowedToMoveUp = yPos - jailBox > 0;
-
-            const newPos = payload.moveUp && allowedToMoveUp ?
-                            yPos + -Math.abs(movementSpeed)
-                            : payload.moveDown && allowedToMoveDown
-                            ? yPos + movementSpeed : yPos + 0;
-
-            state.playerProps.yPos = newPos;
-
-            sendDataToServer({yPos: newPos});
+            state.yPos = payload.newPos;
 
             return {
                 ...state,
@@ -68,13 +64,10 @@ export default (state = initialState, { type, payload }) => {
     }
 };
 
-export function villainState(state = initialState, { type, payload }) {
-    console.log('REDUCER VILLAIN STATE', state);
-    console.log('REDUCER VILLAIN TYPE', type);
-    console.log('REDUCER VILLAIN PAYLOAD', payload);
+export function villainState(state = initialState.villainProps, { type, payload }) {
     switch(type) {
         case GET_VILLAIN_MOVEMENT: {
-            state.villainProps.yPos = payload.yPos;
+            state.yPos = payload.yPos;
             return {
                 ...state,
             }

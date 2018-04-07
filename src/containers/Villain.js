@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PaddleCanvas from '../components/PaddleCanvas';
 
 const Villain = (props) => {
-    console.log('VILLAIN PROPS', props);
     return (
         <PaddleCanvas
             canvasWidth={props.canvasWidth}
@@ -15,12 +14,9 @@ const Villain = (props) => {
     );
 }
 
-const mapStateToProps = (state, ownProps) => {
-    console.log('mapStateToProps VILLAIN STATE', state);
-    console.log('mapStateToProps VILLAIN OWNPROPS', ownProps);
-
+const mapStateToProps = (state) => {
     return {
-        ...state.defaultState.villainProps,
+        ...state.villainState,
     };
 };
 
