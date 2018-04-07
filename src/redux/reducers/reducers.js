@@ -2,7 +2,8 @@ import {
     INIT_PADDLE,
     MOVE_PADDLE,
     GET_VILLAIN_MOVEMENT,
-    MAP_BALL_MOVEMENT_TO_STATE,
+    MAP_BALL_DIRECTION_TO_STATE,
+    MOVE_PING_BALL,
 } from '../actions/actions';
 
 const canvasWidth = 20;
@@ -15,8 +16,8 @@ const paddleColor = 'green';
 const playerName = null;
 const playerId = null;
 
-const initialState = {
-    playerProps: {
+export const initialState = {
+    playerState: {
         canvasWidth,
         canvasHeight,
         xPos,
@@ -27,7 +28,7 @@ const initialState = {
         playerName,
         playerId,
     },
-    villainProps: {
+    villainState: {
         canvasWidth,
         canvasHeight,
         xPos: 0,
@@ -38,18 +39,20 @@ const initialState = {
         playerName,
         playerId,
     },
-    pingBallProps: {
+    pingBallState: {
         xPos: Math.round(window.innerWidth / 2),
         yPos: Math.round(window.innerHeight / 2),
         ballColor: 'red',
         boundaryTouched: false,
         playerTouched: false,
+        direction: 0,
         jailBox,
         movementSpeed,
+        isMoving: false,
     },
 };
 
-export default (state = initialState.playerProps, { type = '', payload = {} }) => {
+export default (state = initialState.playerState, { type = '', payload = {} }) => {
     switch(type) {
 
         case INIT_PADDLE: {
@@ -74,7 +77,7 @@ export default (state = initialState.playerProps, { type = '', payload = {} }) =
     }
 };
 
-export function villainState(state = initialState.villainProps, { type, payload }) {
+export function villainState(state = initialState.villainState, { type, payload }) {
     switch(type) {
         case GET_VILLAIN_MOVEMENT: {
             state.yPos = payload.yPos;
@@ -89,11 +92,22 @@ export function villainState(state = initialState.villainProps, { type, payload 
     }
 }
 
-export function pingBallState(state = initialState.pingBallProps, { type, payload }) {
+export function pingBallState(state = initialState.pingBallState, { type, payload }) {
     switch(type) {
-        case MAP_BALL_MOVEMENT_TO_STATE: {
+        case MAP_BALL_DIRECTION_TO_STATE: {
+            state.direction = payload.direction;
+            console.log('pingBallState STATE', state);
+            return {
+                ...state,
+            }
+        }
+
+        case MOVE_PING_BALL: {
+            console.log('MOVE_PING_BALL REDUCER: ', payload);
+            
             state.xPos = payload.xPos;
             state.yPos = payload.yPos;
+            state.isMoving = payload.isMoving;
 
             return {
                 ...state,

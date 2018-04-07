@@ -10,7 +10,8 @@ export const MOVE_PADDLE = 'MOVE_PADDLE';
 export const INIT_PADDLE = 'INIT_PADDLE';
 export const GET_INITIAL_PLAYER_MOVEMENT = 'GET_INITIAL_PLAYER_MOVEMENT';
 export const GET_VILLAIN_MOVEMENT = 'GET_VILLAIN_MOVEMENT';
-export const MAP_BALL_MOVEMENT_TO_STATE = 'MAP_BALL_MOVEMENT_TO_STATE';
+export const MAP_BALL_DIRECTION_TO_STATE = 'MAP_BALL_DIRECTION_TO_STATE';
+export const MOVE_PING_BALL = 'MOVE_PING_BALL';
 
 export function initPaddle(playerData) {
     console.log('ACTION CALLED: initPaddle', playerData);
@@ -22,13 +23,20 @@ export function initPaddle(playerData) {
     };
 }
 
-export function movePingBall(movementData) {
-    console.log('movementData', movementData);
-
+export function setPingBallDirection(direction) {
     return {
-        type: MAP_BALL_MOVEMENT_TO_STATE,
+        type: MAP_BALL_DIRECTION_TO_STATE,
         payload: {
-            //newPos,
+            direction,
+        },
+    };
+}
+
+export function movePingBall(isMoving, direction, xPos, yPos) {
+    return {
+        type: MOVE_PING_BALL,
+        payload: {
+            isMoving, direction, xPos, yPos
         },
     };
 }
@@ -113,7 +121,7 @@ export function sendPlayerIdToServer(localStoragePlayerData) {
 export function getBallMovementFromServer() {
     return (dispatch) => {
         getBallMovement((err, serverData) => {
-            dispatch(movePingBall(serverData));
+            dispatch(setPingBallDirection(serverData));
         });
     }
 }

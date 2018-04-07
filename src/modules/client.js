@@ -46,7 +46,7 @@ socket.on('disconnect', (error) => {
 socket.on('connect_error', (error) => {
     console.error('CONNECTION ERROR');
     unsubscribe();
-    window.localStorage.removeItem('playerData');
+    window.localStorage.removeItem('AppState');
 });
 
 export {

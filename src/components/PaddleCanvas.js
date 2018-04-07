@@ -8,11 +8,11 @@ class PaddleCanvas extends Component {
     }
 
     componentDidMount() {
-        this.createCanvas();
+        window.requestAnimationFrame(this.createCanvas);
     }
 
     componentDidUpdate() {
-        this.createCanvas();
+        window.requestAnimationFrame(this.createCanvas);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -34,14 +34,14 @@ class PaddleCanvas extends Component {
             yPos,
             color,
         } = this.props;
-        console.log('PADDLE PROPS', this.props);
+
         ctx.fillStyle = color;
         ctx.fillRect(xPos, yPos, canvasWidth, canvasHeight);
     }
 
     render() {
         const classNameModifier = `canvasWrapper ${this.props.className}`;
-        console.log('window.innerWidth', window.innerWidth);
+
         return (
             <div className={classNameModifier}>
                 <canvas ref="canvas" width={window.innerWidth} height={window.innerHeight} />
