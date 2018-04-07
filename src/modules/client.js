@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import { unsubscribe } from './index';
+import { unsubscribe } from '../index';
 
 const socket = io('http://localhost:8000', {
     autoConnect: false,

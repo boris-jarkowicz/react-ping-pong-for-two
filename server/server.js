@@ -40,30 +40,33 @@ const registerPlayer = (playerName, id) => {
     greetPlayer(players[firstOrSecondPlayer].id, players[firstOrSecondPlayer].name);
 };
 
+const listenToConnection = () => {
+    io.on('connection', (socket) => {
+        const { clientsCount } = socket.conn.server;
+        console.log('clientsCount', clientsCount);
+        if (clientsCount > maxAllowedPlayers) {
+            socket.disconnect();
+        }
+        console.log('CREATE PLAYER ONE', clientsCount > 0 && clientsCount < maxAllowedPlayers && !players.playerOne);
+        if (clientsCount > 0 && clientsCount < maxAllowedPlayers && !players.playerOne) {
+            const playerOneName = 'Player 1';
+            registerPlayer(playerOneName, socket.id);
+        }
+        console.log('CREATE PLAYER TWO', clientsCount === maxAllowedPlayers && !players.playerTwo);
+        if (clientsCount === maxAllowedPlayers && !players.playerTwo) {
+            const playerTwoName = 'Player 2';
+            registerPlayer(playerTwoName, socket.id);
+        }
 
-io.on('connection', (socket) => {
-    const { clientsCount } = socket.conn.server;
-    console.log('clientsCount', clientsCount);
-    if (clientsCount > maxAllowedPlayers) {
-        socket.disconnect();
-    }
-    console.log('CREATE PLAYER ONE', clientsCount > 0 && clientsCount < maxAllowedPlayers && !players.playerOne);
-    if (clientsCount > 0 && clientsCount < maxAllowedPlayers && !players.playerOne) {
-        const playerOneName = 'Player 1';
-        registerPlayer(playerOneName, socket.id);
-    }
-    console.log('CREATE PLAYER TWO', clientsCount === maxAllowedPlayers && !players.playerTwo);
-    if (clientsCount === maxAllowedPlayers && !players.playerTwo) {
-        const playerTwoName = 'Player 2';
-        registerPlayer(playerTwoName, socket.id);
-    }
+        console.log('CONNECTED PLAYERS', players);
+        socket.on('disconnecting', (reason) => {
+            const disconnectingSocketId = socket.id;
+            console.log('DISCONNECTING PLAYER', socket.id);
+            console.log('CONNECTED PLAYERS AFTER DISCONNECTED', players);
+        });
 
-    console.log('CONNECTED PLAYERS', players);
-    socket.on('disconnecting', (reason) => {
-        const disconnectingSocketId = socket.id;
-        console.log('DISCONNECTING PLAYER', socket.id);
-        console.log('CONNECTED PLAYERS AFTER DISCONNECTED', players);
+        socket.on('sendData', data => handleDataFromClient(socket, data));
     });
+};
 
-    socket.on('sendData', data => handleDataFromClient(socket, data));
-});
+listenToConnection();

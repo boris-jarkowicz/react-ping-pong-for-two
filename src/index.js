@@ -1,16 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux'
-import { combineReducers, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import './index.css';
 import App from './App';
 import playerState, { villainState } from './redux/reducers/reducers';
 import {
     getPlayerFromServerName,
     sendPlayerIdToServer,
 } from './redux/actions/actions';
-import { establishConnection, getPlayerNumber } from './client';
+import { establishConnection } from './modules/client';
+import { Provider } from 'react-redux'
+import { combineReducers, createStore, applyMiddleware } from 'redux';
 
 const rootReducer = combineReducers({
     playerState,
@@ -54,10 +53,6 @@ if (Object.entries(persistedState).length === 0) {
         () => store.dispatch(sendPlayerIdToServer(getState().playerState))
     );
 }
-
-getPlayerNumber((err, data) => {
-    console.log('PLAYER NUMBER IN STORE', data);
-});
 
 ReactDOM.render(
     <Provider store={store}>

@@ -4,7 +4,7 @@ import {
     getVillainPlayerDataFromServer,
     getPlayerNumber,
     getBallMovement,
-} from '../../client';
+} from '../../modules/client';
 
 export const MOVE_PADDLE = 'MOVE_PADDLE';
 export const INIT_PADDLE = 'INIT_PADDLE';
