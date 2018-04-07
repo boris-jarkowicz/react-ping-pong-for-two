@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
 import App from './App';
-import playerState, { villainState } from './redux/reducers/reducers';
+import playerState, { villainState, pingBallState } from './redux/reducers/reducers';
 import {
     getPlayerFromServerName,
     sendPlayerIdToServer,
@@ -14,6 +14,7 @@ import { combineReducers, createStore, applyMiddleware } from 'redux';
 const rootReducer = combineReducers({
     playerState,
     villainState,
+    pingBallState,
 });
 
 const getPersistedState = window.localStorage.getItem('playerData')

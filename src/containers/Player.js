@@ -27,6 +27,7 @@ class Player extends Component {
     render() {
         return (
             <PaddleCanvas
+                className={'canvasWrapper--player'}
                 canvasWidth={this.props.canvasWidth}
                 canvasHeight={this.props.canvasHeight}
                 xPos={this.props.xPos}

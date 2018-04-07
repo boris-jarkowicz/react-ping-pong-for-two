@@ -113,7 +113,7 @@ export function sendPlayerIdToServer(localStoragePlayerData) {
 export function getBallMovementFromServer() {
     return (dispatch) => {
         getBallMovement((err, serverData) => {
-            dispatch();
+            dispatch(movePingBall(serverData));
         });
     }
 }

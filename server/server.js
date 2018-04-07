@@ -10,18 +10,44 @@ const greetPlayer = (id, name) => {
     io.to(id).emit('serverToClient', `HELLO ${name}`);
 };
 
+const emitPingBallMovementDirection = (ballOptions = {}, socket) => {
+    io.to(ballOptions.id).emit('pingBallMovementDirection', ballOptions.direction);
+};
+
+const initPingBall = (socket, gameOver = false) => {
+    let ballOptions;
+
+    if (gameOver) {
+        return;
+    }
+
+    const playerId = { id: socket.id };
+
+    if (players.playerOne && socket.id === players.playerOne.id) {
+        ballOptions = Object.assign({}, playerId, { direction: 1 });
+    }
+
+    if (players.playerTwo && socket.id === players.playerTwo.id) {
+        ballOptions = Object.assign({}, playerId, { direction: -1 });
+    }
+
+    if (ballOptions) {
+        emitPingBallMovementDirection(ballOptions, socket);
+    }
+};
+
 const handleDataFromClient = (socket, data) => {
     console.log('client is sending ', data);
     socket.broadcast.emit('playerData', data);
 
     if (players.playerOne && data.playerId === players.playerOne.id) {
-        console.log('PLAYER 1 STORED DATA', data.playerId);
         greetPlayer(socket.id, players.playerOne.name);
+        initPingBall(socket);
     }
 
     if (players.playerTwo && data.playerId === players.playerTwo.id) {
-        console.log('PLAYER 2 STORED DATA', data.playerId);
         greetPlayer(socket.id, players.playerTwo.name);
+        initPingBall(socket);
     }
 };
 
@@ -30,10 +56,7 @@ const registerPlayer = (playerName, id) => {
         playerName: playerName,
         playerId: id,
     });
-    console.log('registerPlayer', {
-        playerName: playerName,
-        playerId: id,
-    });
+
     const firstOrSecondPlayer = Object.keys(players).length === 0 ? 'playerOne' : 'playerTwo';
 
     players[firstOrSecondPlayer] = { id: id, name: playerName };
@@ -43,20 +66,25 @@ const registerPlayer = (playerName, id) => {
 const listenToConnection = () => {
     io.on('connection', (socket) => {
         const { clientsCount } = socket.conn.server;
-        console.log('clientsCount', clientsCount);
+
         if (clientsCount > maxAllowedPlayers) {
             socket.disconnect();
         }
-        console.log('CREATE PLAYER ONE', clientsCount > 0 && clientsCount < maxAllowedPlayers && !players.playerOne);
+
         if (clientsCount > 0 && clientsCount < maxAllowedPlayers && !players.playerOne) {
             const playerOneName = 'Player 1';
             registerPlayer(playerOneName, socket.id);
         }
-        console.log('CREATE PLAYER TWO', clientsCount === maxAllowedPlayers && !players.playerTwo);
+
         if (clientsCount === maxAllowedPlayers && !players.playerTwo) {
             const playerTwoName = 'Player 2';
             registerPlayer(playerTwoName, socket.id);
         }
+
+        const bothPlayersConnected = players.playerOne && players.playerTwo ? true : false;
+
+        socket.on('sendData', data => handleDataFromClient(socket, data));
+        initPingBall(socket);
 
         console.log('CONNECTED PLAYERS', players);
         socket.on('disconnecting', (reason) => {
@@ -64,8 +92,6 @@ const listenToConnection = () => {
             console.log('DISCONNECTING PLAYER', socket.id);
             console.log('CONNECTED PLAYERS AFTER DISCONNECTED', players);
         });
-
-        socket.on('sendData', data => handleDataFromClient(socket, data));
     });
 };
 

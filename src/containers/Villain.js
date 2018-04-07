@@ -5,6 +5,7 @@ import PaddleCanvas from '../components/PaddleCanvas';
 const Villain = (props) => {
     return (
         <PaddleCanvas
+            className={'canvasWrapper--villain'}
             canvasWidth={props.canvasWidth}
             canvasHeight={props.canvasHeight}
             xPos={props.xPos}

@@ -6,10 +6,9 @@ const socket = io('http://localhost:8000', {
     reconnection: false,
 });
 
-console.log('socket', socket);
+//console.log('socket', socket);
 
 function establishConnection(playerId, cb) {
-    console.log('establishConnection CALLED');
     socket.id = playerId;
     socket.open();
     socket.on('connect', () => {
@@ -31,7 +30,7 @@ function getPlayerNumber(cb) {
 }
 
 function getBallMovement(cb) {
-    socket.on('sendBallMovement', data => cb(null, data));
+    socket.on('pingBallMovementDirection', data => cb(null, data));
 }
 
 socket.on('serverToClient', (data) => {

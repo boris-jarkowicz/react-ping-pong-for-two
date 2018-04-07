@@ -33,7 +33,7 @@ class PaddleCanvas extends Component {
         } = this.props;
 
         ctx.beginPath();
-        ctx.arc(75, 50, 25, 0, 2 * Math.PI);
+        ctx.arc(xPos, yPos, 25, 0, 2 * Math.PI);
         ctx.fillStyle = color;
         ctx.fill();
         ctx.stroke();
@@ -41,7 +41,7 @@ class PaddleCanvas extends Component {
 
     render() {
         return (
-            <div className="canvasWrapper">
+            <div className="canvasWrapper canvasWrapper--ball">
                 <canvas ref="canvas" width={window.innerWidth} height={window.innerHeight} />
             </div>
         );

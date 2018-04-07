@@ -34,14 +34,16 @@ class PaddleCanvas extends Component {
             yPos,
             color,
         } = this.props;
-
+        console.log('PADDLE PROPS', this.props);
         ctx.fillStyle = color;
         ctx.fillRect(xPos, yPos, canvasWidth, canvasHeight);
     }
 
     render() {
+        const classNameModifier = `canvasWrapper ${this.props.className}`;
+        console.log('window.innerWidth', window.innerWidth);
         return (
-            <div className="canvasWrapper">
+            <div className={classNameModifier}>
                 <canvas ref="canvas" width={window.innerWidth} height={window.innerHeight} />
             </div>
         );

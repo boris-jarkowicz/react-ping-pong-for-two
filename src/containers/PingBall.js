@@ -25,7 +25,7 @@ class PingBall extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        ...state.ballState,
+        ...state.pingBallState,
     };
 };
 
